@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Adjudicator Breaks Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #6dd5fa, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .result {
+      background: #e9f7ef;
+      padding: 15px;
+      border: 1px solid #2ecc71;
+      border-radius: 8px;
+      color: #145a32;
+      margin-top: 20px;
+    }
+    a {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #2980b9;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="debatebreaks.html">← Back to Home</a>
+    <h1>Adjudicator Breaks Calculator</h1>
+
+    <label>Number of Breaking Teams:</label>
+    <input type="number" id="breakingTeams" placeholder="e.g. 16" />
+
+    <label>Debate Format:</label>
+    <select id="format">
+      <option value="2">Asian Parliamentary (2 teams/room)</option>
+      <option value="4">British Parliamentary (4 teams/room)</option>
+    </select>
+
+    <button onclick="calculateAdjs()">Calculate</button>
+
+    <div id="output" class="result"></div>
+  </div>
+
+  <script>
+    function calculateAdjs() {
+      const breaking = parseInt(document.getElementById('breakingTeams').value);
+      const format = parseInt(document.getElementById('format').value);
+
+      if (!breaking || breaking <= 0) {
+        document.getElementById("output").innerHTML = "Please enter a valid number of breaking teams.";
+        return;
+      }
+
+      const rooms = Math.ceil(breaking / format);
+      const bestCase = rooms * 5;
+
+      let realistic = 0;
+      if (rooms <= 2) {
+        realistic = rooms * 5;
+      } else {
+        realistic = (2 * 5) + ((rooms - 2) * 3);
+      }
+
+      const resultHTML = `
+        <strong>Rooms in first outround:</strong> ${rooms}<br><br>
+
+        <strong>Best Case</strong><br>
+        Assuming all rooms require 5-person panels.<br>
+        <b>Adjudicators needed:</b> ${bestCase}<br><br>
+
+        <strong>Realistic Estimate</strong><br>
+        Assuming 3-person panels for earlier outrounds, and 5 for semis and finals.<br>
+
+        • ${rooms} rooms × 3 judges = ${(rooms) * 3}<br>
+        <br><br>
+
+        <i>Note: This includes only the open break and may include members of the CAP (Core Adjudication Panel) Adj break = adj score = diversity .</i>
+      `;
+
+      document.getElementById("output").innerHTML = resultHTML;
+    }
+  </script>
+</body>
+</html>
